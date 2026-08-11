@@ -14,14 +14,18 @@ import math as math
 
 data = pd.DataFrame()
 num_stock = 0
+plt.style.use('dark_background')
+stock_list = []
 
 while True:
-        stock = str(input("What stock do you want to analyze? (X to exit"))
+        stock = str(input("What stock do you want to analyze? (X to exit)"))
+        stock_list.append(stock.upper())
         if(stock.lower() == 'x'):
             break
-        data[f"Stock{num_stock}"] = pd.DataFrame(yf.download(stock, period='1y'))["Close"].pct_change()
+        data[f"Stock{num_stock}"] = pd.DataFrame(yf.download(stock, period='5y'))["Close"].pct_change()
         if(data[f"Stock{num_stock}"].empty):
              print("Try again, please use the ticker symbol!")
+             num_stock -= 1
              continue 
         num_stock += 1
 
@@ -84,6 +88,20 @@ for i in range(10000):
 
     
 
+fig, ax = plt.subplots(1,2, gridspec_kw = {'width_ratios': [2,5]}, figsize = (10,4.8)) 
+ax[0].spines['top'].set_visible(False)
+ax[0].spines['right'].set_visible(False)
+ax[0].spines['left'].set_visible(False)
+ax[0].spines['bottom'].set_visible(False)
+ax[0].set_xticks([])
+ax[0].set_yticks([])
+
+statement = f"Sharpe Ratio: {-max_sharpe['fun']:.2f}\nStock Weights:"
+for i in range(len(max_sharpe['x'])):
+     statement += f"\n{stock_list[i]}: {max_sharpe['x'][i]:.1%}"
+
+ax[0].text(0.75,0.8,statement, fontweight = 'bold', fontsize = 14.5, va = "top", ha = 'right')
+
 
 plt.scatter(vols, returns, c = sharpe_ratios, cmap = "viridis")
 plt.scatter(max_sharpe_x, max_sharpe_y, marker = "*", color = "r")
@@ -91,6 +109,7 @@ plt.colorbar(label = "Sharpe Ratio")
 plt.xlabel("Volatility")
 plt.ylabel("Return")
 plt.title("Efficient Frontier")
+# plt.subplots_adjust(wspace=0)
 plt.show()
 
 
