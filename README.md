@@ -53,13 +53,12 @@ Enter tickers one by one when prompted. Type done when finished.
 ## Example output
 
 ```
-Optimal Portfolio Weights:
+Sharpe Ratio: 0.70
+Stock Weights:
 AAPL:   36.5%
 GOOGL:  51.1%
 TSLA:    0.0%
 GM:     12.4%
-
-Maximum Sharpe Ratio: 0.70
 ```
 
 A 0% allocation means the optimizer found that stock adds no value to the portfolio at its current risk and return profile relative to the other options.
